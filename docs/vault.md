@@ -68,7 +68,7 @@ quilibrium_password: "<your_strong_password>"
 ```
 3. Encrypt the ```vaults/vault.yml``` file with this command:
 ```
-ansible-vault ansible encrypt vaults/vault.yml
+ansible-vault encrypt vaults/vault.yml
 ```
 
 ## Official documentation
