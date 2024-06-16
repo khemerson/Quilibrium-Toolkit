@@ -34,13 +34,33 @@
         rm -rf {{ node_path }}
         mkdir -p {{ node_path }}
         cd {{ node_path }}
-        git clone https://source.quilibrium.com/quilibrium/ceremonyclient.git
+        git clone https://github.com/QuilibriumNetwork/ceremonyclient.git
         cd ceremonyclient
-        git checkout release-cdn
+        git checkout release
         cd node
-        rm -f ./node
-        file=$(find . -type f -name "*amd64*" -executable | head -n 1)
+
+        \rm -f ./node*
+        files=$(curl https://releases.quilibrium.com/release)
+        for file in $files; do
+            if ! test -f "./$file"; then
+                curl "https://releases.quilibrium.com/$file" > "$file"
+            fi
+        done
+        
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+          if [[ $(uname -m) == "aarch64"* ]]; then
+            file=$(find . -type f -name "*linux*arm64" | head -n 1)
+          else
+            file=$(find . -type f -name "*linux*amd64" | head -n 1)
+          fi
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+          file=$(find . -type f -name "*darwin*arm64" | head -n 1)
+        else
+          return 1
+        fi
+
         if [ -n "$file" ]; then
+            chmod +x $file
             ln -s $file ./node
         else
             return 1
@@ -68,6 +88,11 @@
     - name: Start Quilibrium node
       include_role:
         name: roles/node/start_node
+
+    - name: Pause for 30s
+      pause:
+        seconds: 30
+
     - name: Stop Quilibrium node
       include_role:
         name: roles/node/stop_node

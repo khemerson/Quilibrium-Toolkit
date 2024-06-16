@@ -11,6 +11,7 @@ backup_store_dir: False
 
 go_max_procs: 8
 dataWorkerMemoryLimit: 0
+dataWorkerBaseListenPort: 40000
 
 watchdog_timer: 60
 watchdog_auto_restart: true
@@ -24,3 +25,22 @@ graphana_prometheus_password:
 graphana_loki_url: 
 graphana_loki_username: 
 graphana_loki_password:
+
+auto_backup_type: 
+auto_backup_zip_password: 
+auto_backup_remote_path: 
+
+auto_backup_ftp_host:
+auto_backup_ftp_port:
+auto_backup_ftp_user:
+auto_backup_ftp_pass:
+
+auto_backup_gdrive_token:
+auto_backup_dropbox_token:
+auto_backup_storj_access_grant:
+
+auto_backup_onedrive_token:
+auto_backup_onedrive_drive_id:
+auto_backup_onedrive_drive_type:
+
+
