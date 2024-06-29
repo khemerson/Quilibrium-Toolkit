@@ -2,6 +2,12 @@
   hosts: "{{ target }}"
 
   tasks:
+    - become: true
+      apt:
+        name:
+          - curl
+        state: present
+
     - name: Check if node is installed
       stat:
         path: "{{ node_path }}/ceremonyclient/node/.config"
@@ -11,6 +17,11 @@
         msg: "Directory '{{ node_path }}/ceremonyclient/node/.config' not exists. Playbook aborted."
       when: not(node_check.stat.exists)
 
+    - block:
+      - name: Stop watchdog
+        include_role:
+          name: roles/watchdog/stop_watchdog
+      ignore_errors: true
     - block:
       - name: Stop Quilibrium node
         include_role:
@@ -63,3 +74,9 @@
         include_role:
           name: roles/node/start_node
       ignore_errors: true
+    - block:
+      - name: Start watchdog
+        include_role:
+          name: roles/watchdog/start_watchdog
+      ignore_errors: true
+

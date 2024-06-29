@@ -5,3 +5,9 @@
     - name: start node
       include_role:
         name: roles/node/start_node
+    - block:
+      - name: start watchdog
+        include_role:
+          name: roles/watchdog/start_watchdog
+      ignore_errors: true
+
